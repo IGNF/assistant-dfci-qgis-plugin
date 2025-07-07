@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<vues>
+    <champs id="piste_dfci">
+        <valeur>NULL</valeur>
+        <valeur>Non</valeur>
+        <valeur>Oui</valeur>
+    </champs>
+    <champs id="categorie_dfci">
+        <valeur>NULL</valeur>
+        <valeur>1ére catégorie</valeur>
+        <valeur>2ème catégorie</valeur>
+        <valeur>3ème catégorie</valeur>
+    </champs>
+    <champs id="nature_detaillee_dfci">
+        <valeur>NULL</valeur>
+        <valeur>Empierré</valeur>
+        <valeur>Goudron</valeur>
+        <valeur>Graviers</valeur>
+        <valeur>Pierres</valeur>
+        <valeur>Sable</valeur>
+        <valeur>Sol naturel</valeur>
+    </champs>
+    <champs id="sens_de_circulation_dfci">
+        <valeur>NULL</valeur>
+        <valeur>Double sens</valeur>
+        <valeur>Sens direct</valeur>
+        <valeur>Sens inverse</valeur>
+    </champs>
+    <champs id="vitesse_moyenne_dfci">
+    </champs>
+    <champs id="aire_de_retournement_dfci">
+        <valeur>NULL</valeur>
+        <valeur>Au moins une aire</valeur>
+        <valeur>Aucune</valeur>
+        <valeur>Plusieurs aires</valeur>
+    </champs>
+    <champs id="gabarit_dfci">
+        <valeur>NULL</valeur>
+        <valeur>Poids lourd</valeur>
+        <valeur>Super poids lourd</valeur>
+        <valeur>Véhicule léger</valeur>
+    </champs>
+    <champs id="impasse_dfci">
+        <valeur>NULL</valeur>
+        <valeur>Non</valeur>
+        <valeur>Oui</valeur>
+    </champs>
+    <champs id="ouvrage_d_art_limitant_dfci">
+        <valeur>NULL</valeur>
+        <valeur>Non</valeur>
+        <valeur>Oui</valeur>
+    </champs>
+    <champs id="pente_maximale_dfci">
+    </champs>
+    <champs id="piste_dfci_debroussaillee">
+        <valeur>NULL</valeur>
+        <valeur>Non</valeur>
+        <valeur>Oui</valeur>
+    </champs>
+    <champs id="piste_dfci_fosses">
+        <valeur>NULL</valeur>
+        <valeur>Aucun</valeur>
+        <valeur>Fossé à droite</valeur>
+        <valeur>Fossé à gauche</valeur>
+        <valeur>Fossés à droite et à gauche</valeur>
+    </champs>
+    <champs id="tout_terrain_dfci">
+        <valeur>NULL</valeur>
+        <valeur>Non</valeur>
+        <valeur>Oui</valeur>
+    </champs>
+    <champs id="zone_de_croisement_dfci">
+        <valeur>NULL</valeur>
+        <valeur>Au moins une zone</valeur>
+        <valeur>Aucune</valeur>
+        <valeur>Plusieurs zones</valeur>
+    </champs>
+</vues>

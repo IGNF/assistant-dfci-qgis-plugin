@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/assisstant_dfci" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
