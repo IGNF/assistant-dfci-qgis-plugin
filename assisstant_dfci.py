@@ -197,20 +197,6 @@ class Assisstant_DFCI:
             widget_inerface.setCurrentIndex(0)
             widget_inerface.setStyleSheet(CUSTOM_WIDGETS[2])
 
-    # def get_attribut_widgets(self):
-    #     dico_champs_val = {}
-    #
-    #     for widget_inerface in self.get_widgets("QLineEdit"):
-    #         if widget_inerface == "":
-    #             print("LE LINE EDIT EST NULL !")
-    #             dico_champs_val[widget_inerface.objectName()] = "NULL"
-    #         else:
-    #             dico_champs_val[widget_inerface.objectName()] = widget_inerface.text()
-    #     for widget_inerface in self.get_widgets("QComboBox"):
-    #         dico_champs_val[widget_inerface.objectName()] = widget_inerface.currentText()
-    #
-    #     return dico_champs_val
-
     def get_attributs_entite(self,layer,nom_champs,valeur,champs_renvoye):
         project = QgsProject.instance()
         layer1 = project.mapLayersByName(layer)
@@ -293,7 +279,6 @@ class Assisstant_DFCI:
         for sel in self.layer.selectedFeatures():
 
             # changement d'attributs par paquet (dico de valeurs)
-            # pas de test si les valeurs sont bien differentes
             if not self.layer.changeAttributeValues(sel.id(), self.dico_champs_modifie):
                 print("Erreur: changement d'attribut non effectué")
 
@@ -437,8 +422,14 @@ class Assisstant_DFCI:
 
     def combo_Change_utilisateur(self,widget_interface):
         index_champs = self.layer.fields().indexOf(widget_interface.objectName())
-        self.dico_champs_modifie[index_champs] = widget_interface.currentText()
-        # self.dico_champs_modifie[widget_interface.objectName()] = widget_interface.currentText()
+        valeur = widget_interface.currentText()
+        if valeur == "Non":
+            valeur = 0
+        elif valeur == "Oui":
+            valeur = 1
+        else:
+            valeur = widget_interface.currentText()
+        self.dico_champs_modifie[index_champs] = valeur
         self.dlg.pushButtonValider.setEnabled(True)
 
     def widgetChange(self,widget_interface):
