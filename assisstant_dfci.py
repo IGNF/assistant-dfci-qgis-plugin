@@ -306,11 +306,13 @@ class Assisstant_DFCI:
         self.tableur.adddonnees(ligne_excel)
         self.tableur.sauvegarder()
 
-        self.layer.commitChanges()
+        # TODO : ne plus faire si on valide avec la disquette
+        # self.layer.commitChanges()
 
         # re sel des troncons
-        for cleabs in self.dico_champs_avant_modif.keys():
-            self.layer.selectByExpression(f"{CLEABS} = '{cleabs}'", QgsVectorLayer.AddToSelection)
+        # TODO : ne plus re sélectionner si on valide avec la disquette
+        # for cleabs in self.dico_champs_avant_modif.keys():
+        #     self.layer.selectByExpression(f"{CLEABS} = '{cleabs}'", QgsVectorLayer.AddToSelection)
 
         self.dlg.pushButtonUndo.setEnabled(True)
 
@@ -318,11 +320,14 @@ class Assisstant_DFCI:
         self.afficheMessageBar(
             f"Les modifications ont été effectués sur : {self.layer.selectedFeatureCount()} tronçon(s)")
 
-        self.afficheMessageBar(f"Les modifications ont été effectués sur : {self.layer.selectedFeatureCount()} tronçon(s)")
 
     def undo(self):
         self.layer.startEditing()
 
+        # TODO : test validation avec disquette
+        QMessageBox.warning(None,TITRE,"Cette fonction n'est plus implementée.\n"
+                                       "Allez dans Editer->Annuler")
+        return
         ############# LOG ########################################
         # si le fichier de log est ouvert, on quitte. Il faut le fermer manuellement
         if not self.tableur.log_is_open():
