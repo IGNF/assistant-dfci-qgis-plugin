@@ -35,7 +35,7 @@ class Tableur:
         if not fichier_excel.exists():
             self.wbook = openpyxl.Workbook()
             self.wsfeuille = self.wbook.active
-            self.wsfeuille.title = "Assisstant DFCI"
+            self.wsfeuille.title = "Assistant DFCI"
             self.wsfeuille["A1"] = "Date"
             self.wsfeuille["B1"] = "N° de transaction"
             self.wsfeuille["C1"] = "CLEABS"
@@ -74,7 +74,7 @@ class Tableur:
 
         else:
             self.wbook = openpyxl.load_workbook(fichier_excel)
-            self.wsfeuille = self.wbook["Assisstant DFCI"]
+            self.wsfeuille = self.wbook["Assistant DFCI"]
 
 
     def log_is_open(self):
