@@ -207,8 +207,6 @@ class Assisstant_DFCI:
             if feature[nom_champs] == valeur:
                 return feature[champs_renvoye]
 
-
-
     def init_widgets_from_selection(self):
 
         self.vide_attribut_widgets()
@@ -224,8 +222,7 @@ class Assisstant_DFCI:
                 # suppr le try quand la categorie dfci sera en ecriture dans le guichet
                 try:
                     list_attr.append(str(sel[widg.objectName()]))
-                    list_attr = [val.replace("0", "Non") for val in list_attr]
-                    list_attr = [val.replace("1", "Oui") for val in list_attr]
+                    list_attr = ["Non" if val == "0" else "Oui" if val == "1" else val for val in list_attr]
                 except KeyError:
                     pass
             compte = Counter(list_attr)
