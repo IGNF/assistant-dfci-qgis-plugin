@@ -22,7 +22,7 @@ hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
 changelog=
 	v 0.1 : version initiale
-	v 0.2 : version après recette
+	v 1.0.0 : version diffusée
 
 # Tags are comma separated with spaces allowed
 tags=python

@@ -8,6 +8,8 @@ import subprocess
 
 # test
 def afficherlog():
+    QMessageBox.warning(None,TITRE,"Le log n'est plus implémenté dans cette version du plugin")
+    return
     # fic = os.path.dirname(__file__) + "/log.txt"
     fic = os.path.dirname(__file__) + "/transaction.xlsx"
 

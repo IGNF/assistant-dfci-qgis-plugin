@@ -266,11 +266,11 @@ class Assisstant_DFCI:
 
         ############# LOG ########################################
         # si le fichier de log est ouvert, on quitte. Il faut le fermer manuellement
-        if not self.tableur.log_is_open():
-            return
-        # liste pour fichier excel
-        ligne_excel = []
-        log_modif = ""
+        # if not self.tableur.log_is_open():
+        #     return
+        # # liste pour fichier excel
+        # ligne_excel = []
+        # log_modif = ""
 
         self.dico_champs_avant_modif.clear()
 
@@ -291,20 +291,20 @@ class Assisstant_DFCI:
                         # initialisation du dico avec cle = cleabs
                         self.dico_champs_avant_modif[sel[CLEABS]] = []
 
-                    log_modif += (f"{self.layer.fields()[id_champs].name()} :"
-                                  f"{ancienne_val} --->"
-                                  f"{nouvelle_val}\n")
+                    # log_modif += (f"{self.layer.fields()[id_champs].name()} :"
+                    #               f"{ancienne_val} --->"
+                    #               f"{nouvelle_val}\n")
                     self.dico_champs_avant_modif[sel[CLEABS]].append((id_champs,ancienne_val,nouvelle_val))
 
-            if log_modif != "":
-                ligne_excel.append([datetime.today().strftime('%d %B %Y %H:%M'), "En cours de dévo",
-                                    sel[CLEABS],
-                                    log_modif
-                                    ])
-            log_modif = ""
+            # if log_modif != "":
+            #     ligne_excel.append([datetime.today().strftime('%d %B %Y %H:%M'), "En cours de dévo",
+            #                         sel[CLEABS],
+            #                         log_modif
+            #                         ])
+            # log_modif = ""
 
-        self.tableur.adddonnees(ligne_excel)
-        self.tableur.sauvegarder()
+        # self.tableur.adddonnees(ligne_excel)
+        # self.tableur.sauvegarder()
 
         # TODO : ne plus faire si on valide avec la disquette
         # self.layer.commitChanges()
@@ -330,11 +330,11 @@ class Assisstant_DFCI:
         return
         ############# LOG ########################################
         # si le fichier de log est ouvert, on quitte. Il faut le fermer manuellement
-        if not self.tableur.log_is_open():
-            return
+        # if not self.tableur.log_is_open():
+        #     return
         # liste pour fichier excel
-        ligne_excel = []
-        log_modif = ""
+        # ligne_excel = []
+        # log_modif = ""
         dico_idchamps_attr = {}
 
         for cleabs, list_champs_val in self.dico_champs_avant_modif.items():
@@ -348,24 +348,24 @@ class Assisstant_DFCI:
             for val in list_champs_val:
                 id_champs = val[0]
                 ancienne_val = val[1]
-                nouvelle_val = val[2]
+                # nouvelle_val = val[2]
                 dico_idchamps_attr[id_champs] = ancienne_val
 
-                log_modif += (f"{self.layer.fields()[id_champs].name()} :"
-                             f"{nouvelle_val} --->"
-                             f"{ancienne_val}\n")
+                # log_modif += (f"{self.layer.fields()[id_champs].name()} :"
+                #              f"{nouvelle_val} --->"
+                #              f"{ancienne_val}\n")
 
             self.layer.changeAttributeValues(ident[0],dico_idchamps_attr)
 
-            if log_modif != "":
-                ligne_excel.append([datetime.today().strftime('%d %B %Y %H:%M'), "En cours de dévo",
-                                cleabs,
-                                log_modif
-                                ])
-            log_modif = ""
+            # if log_modif != "":
+            #     ligne_excel.append([datetime.today().strftime('%d %B %Y %H:%M'), "En cours de dévo",
+            #                     cleabs,
+            #                     log_modif
+            #                     ])
+            # log_modif = ""
 
-        self.tableur.adddonnees(ligne_excel)
-        self.tableur.sauvegarder()
+        # self.tableur.adddonnees(ligne_excel)
+        # self.tableur.sauvegarder()
         self.layer.commitChanges()
 
         # re selection des troncons
@@ -497,7 +497,7 @@ class Assisstant_DFCI:
 
 
         # class du tableur
-        self.tableur = None
+        # self.tableur = None
 
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
@@ -530,7 +530,7 @@ class Assisstant_DFCI:
             self.dlgAProposDe = Aproposde()
             self.dlgAProposDe.pushButtonDoc.clicked.connect(afficheDoc)
             # tableur
-            self.tableur = Tableur()
+            # self.tableur = Tableur()
 
             self.dlg.textEdit_info_route.setText("")
             self.dlg.textEdit_info_complexe.setText("")
