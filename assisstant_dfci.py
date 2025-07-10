@@ -492,7 +492,6 @@ class Assisstant_DFCI:
         # valeur = couple de champs et attr avant modif
         self.dico_champs_avant_modif = {}
 
-
         # class du tableur
         # self.tableur = None
 
@@ -546,8 +545,10 @@ class Assisstant_DFCI:
                 self.dlg.pushButtonCheminCourt.setEnabled(False)
             self.dlg.pushButtonCheminCourt.clicked.connect(self.chemin_court)
             self.dlg.pushButtonSensNum.clicked.connect(self.affiche_sens)
-            self.dlg.pushButtonLog.clicked.connect(afficherlog)
-            self.dlg.pushButtonUndo.clicked.connect(self.undo)
+            # self.dlg.pushButtonLog.clicked.connect(afficherlog)
+            # self.dlg.pushButtonUndo.clicked.connect(self.undo)
+            self.dlg.pushButtonLog.hide()
+            self.dlg.pushButtonUndo.hide()
             # self.dlg.pushButtonUndo.setEnabled(False)
 
 
