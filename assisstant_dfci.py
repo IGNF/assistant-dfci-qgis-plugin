@@ -311,7 +311,7 @@ class Assisstant_DFCI:
         # for cleabs in self.dico_champs_avant_modif.keys():
         #     self.layer.selectByExpression(f"{CLEABS} = '{cleabs}'", QgsVectorLayer.AddToSelection)
 
-        self.dlg.pushButtonUndo.setEnabled(True)
+        # self.dlg.pushButtonUndo.setEnabled(True)
 
         QGuiApplication.restoreOverrideCursor()
         self.afficheMessageBar(
@@ -370,7 +370,7 @@ class Assisstant_DFCI:
             self.layer.selectByExpression(f"{CLEABS} = '{cleabs}'", QgsVectorLayer.AddToSelection)
 
         self.dico_champs_avant_modif.clear()
-        self.dlg.pushButtonUndo.setEnabled(False)
+        # self.dlg.pushButtonUndo.setEnabled(False)
         self.afficheMessageBar(f"Les modifications ont été effectués sur : {len(self.dico_champs_avant_modif)} tronçon(s)")
 
 
@@ -548,7 +548,7 @@ class Assisstant_DFCI:
             self.dlg.pushButtonSensNum.clicked.connect(self.affiche_sens)
             self.dlg.pushButtonLog.clicked.connect(afficherlog)
             self.dlg.pushButtonUndo.clicked.connect(self.undo)
-            self.dlg.pushButtonUndo.setEnabled(False)
+            # self.dlg.pushButtonUndo.setEnabled(False)
 
 
             # evenement des widgets
