@@ -6,18 +6,6 @@ from qgis.core import QgsCoordinateReferenceSystem, QgsProject
 from .constante import *
 import subprocess
 
-# test
-def afficherlog():
-    QMessageBox.warning(None,TITRE,"Le log n'est plus implémenté dans cette version du plugin")
-    return
-    # fic = os.path.dirname(__file__) + "/log.txt"
-    fic = os.path.dirname(__file__) + "/transaction.xlsx"
-
-    if not os.path.isfile(fic):
-        afficheerreur("Le fichier de log n'existe pas\nIl sera crée dès la premiére transaction", "Information")
-    else:
-        subprocess.Popen(["start", "excel", fic], shell=True)
-
 def afficheDoc():
     fichier = os.path.join(os.path.dirname(__file__), "assistant dfci.pdf")
     if not os.path.isfile(fichier):

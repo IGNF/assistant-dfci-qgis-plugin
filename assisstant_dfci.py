@@ -25,31 +25,20 @@ from PIL.features import features
 from PyQt5.QtWidgets import QComboBox, QLineEdit, QLabel
 
 from PyQt5.QtGui import QIntValidator
-
-from datetime import datetime
-
 from collections import Counter
-
 from qgis.core import Qgis, QgsExpression
 
 from .assisstant_dfci_dialog import Assisstant_DFCIDialog
 from .fonction import  *
 from .cheminpluscourt import *
-from .tableur import *
 import xml.etree.ElementTree as ET
-
-
 from .aproposde import Aproposde
 
-
 class Assisstant_DFCI:
-
-
     """
     IMPORTANT : le nom (objectName) des CComboBox doivent avoir une correspondance
     avec un champs dans le xml.
     """
-
     # retourne la liste des widgets dans le formlayout
     def get_widgets(self,type_widget = "ALL"):
         list_combo = []
@@ -73,7 +62,6 @@ class Assisstant_DFCI:
         tmp = list_line_edit + list_combo + list_label
         return tmp
 
-
     # initialise tous les combobox avec les attributs issus du xml
     # et return : le dictionnaire
     # clé : champs
@@ -81,9 +69,7 @@ class Assisstant_DFCI:
     def ini_widget(self):
         # parcours des widgets combobox inclu dans le formLayouWidget
         # et remplissage d'une liste de QComboBox
-
         list_widget = self.get_widgets("QComboBox")
-
 
         # initialisation du dictionnaire des champs, attributs associés
         # à partir du xml
@@ -144,7 +130,6 @@ class Assisstant_DFCI:
         self.iface.setActiveLayer(couche[0])
         self.layer = self.iface.activeLayer()
 
-
     # recuperer les attributs d'un objet selectionné en fonction du nom des champs
     def set_info_route_in_label(self,nom_champs):
         self.dlg.textEdit_info_route.setText("")
@@ -187,7 +172,6 @@ class Assisstant_DFCI:
             self.dlg.textEdit_info_complexe.append(f"Numéro\t      : {numero}")
             toponyme = self.get_attributs_entite(LAYER_ESPACE_CO[1], CLEABS, complexe,TOPONYME)
             self.dlg.textEdit_info_complexe.append(f"Toponyme\t      : {toponyme}")
-
 
     def vide_attribut_widgets(self):
         for widget_inerface in self.get_widgets("QLineEdit"):
@@ -261,16 +245,6 @@ class Assisstant_DFCI:
         if len(self.dico_champs_modifie) == 0:
             return
 
-        ############# LOG ########################################
-        # si le fichier de log est ouvert, on quitte. Il faut le fermer manuellement
-        # if not self.tableur.log_is_open():
-        #     return
-        # # liste pour fichier excel
-        # ligne_excel = []
-        # log_modif = ""
-
-        self.dico_champs_avant_modif.clear()
-
         QGuiApplication.setOverrideCursor(Qt.WaitCursor)
         self.layer.startEditing()
         for sel in self.layer.selectedFeatures():
@@ -278,108 +252,15 @@ class Assisstant_DFCI:
             # changement d'attributs par paquet (dico de valeurs)
             if not self.layer.changeAttributeValues(sel.id(), self.dico_champs_modifie):
                 print("Erreur: changement d'attribut non effectué")
-
-            # **** gestion du dico pour undo ******
-            for id_champs , nouvelle_val in self.dico_champs_modifie.items():
-                ancienne_val = sel[id_champs]
-                # la valeur à modifier est differentes de la valeur actuelle
-                if ancienne_val != nouvelle_val:
-                    if sel[CLEABS] not in self.dico_champs_avant_modif:
-                        # initialisation du dico avec cle = cleabs
-                        self.dico_champs_avant_modif[sel[CLEABS]] = []
-
-                    # log_modif += (f"{self.layer.fields()[id_champs].name()} :"
-                    #               f"{ancienne_val} --->"
-                    #               f"{nouvelle_val}\n")
-                    self.dico_champs_avant_modif[sel[CLEABS]].append((id_champs,ancienne_val,nouvelle_val))
-
-            # if log_modif != "":
-            #     ligne_excel.append([datetime.today().strftime('%d %B %Y %H:%M'), "En cours de dévo",
-            #                         sel[CLEABS],
-            #                         log_modif
-            #                         ])
-            # log_modif = ""
-
-        # self.tableur.adddonnees(ligne_excel)
-        # self.tableur.sauvegarder()
-
-        # TODO : ne plus faire si on valide avec la disquette
-        # self.layer.commitChanges()
-
-        # re sel des troncons
-        # TODO : ne plus re sélectionner si on valide avec la disquette
-        # for cleabs in self.dico_champs_avant_modif.keys():
-        #     self.layer.selectByExpression(f"{CLEABS} = '{cleabs}'", QgsVectorLayer.AddToSelection)
-
-        # self.dlg.pushButtonUndo.setEnabled(True)
-
         QGuiApplication.restoreOverrideCursor()
         self.afficheMessageBar(
             f"Les modifications ont été effectués sur : {self.layer.selectedFeatureCount()} tronçon(s)")
-
-
-    def undo(self):
-        self.layer.startEditing()
-
-        # TODO : test validation avec disquette
-        QMessageBox.warning(None,TITRE,"Cette fonction n'est plus implementée.\n"
-                                       "Allez dans Editer->Annuler")
-        return
-        ############# LOG ########################################
-        # si le fichier de log est ouvert, on quitte. Il faut le fermer manuellement
-        # if not self.tableur.log_is_open():
-        #     return
-        # liste pour fichier excel
-        # ligne_excel = []
-        # log_modif = ""
-        dico_idchamps_attr = {}
-
-        for cleabs, list_champs_val in self.dico_champs_avant_modif.items():
-            # recuperation des id des entités pour chaque CLEABS
-            expr = QgsExpression(f"\"{CLEABS}\" = '{cleabs}'")
-            request = QgsFeatureRequest(expr)
-            entite = self.layer.getFeatures(request)
-            ident = [feat.id() for feat in entite]
-
-            # construction d'un dico avec les attributs à changer
-            for val in list_champs_val:
-                id_champs = val[0]
-                ancienne_val = val[1]
-                # nouvelle_val = val[2]
-                dico_idchamps_attr[id_champs] = ancienne_val
-
-                # log_modif += (f"{self.layer.fields()[id_champs].name()} :"
-                #              f"{nouvelle_val} --->"
-                #              f"{ancienne_val}\n")
-
-            self.layer.changeAttributeValues(ident[0],dico_idchamps_attr)
-
-            # if log_modif != "":
-            #     ligne_excel.append([datetime.today().strftime('%d %B %Y %H:%M'), "En cours de dévo",
-            #                     cleabs,
-            #                     log_modif
-            #                     ])
-            # log_modif = ""
-
-        # self.tableur.adddonnees(ligne_excel)
-        # self.tableur.sauvegarder()
-        self.layer.commitChanges()
-
-        # re selection des troncons
-        for cleabs in self.dico_champs_avant_modif.keys():
-            self.layer.selectByExpression(f"{CLEABS} = '{cleabs}'", QgsVectorLayer.AddToSelection)
-
-        self.dico_champs_avant_modif.clear()
-        # self.dlg.pushButtonUndo.setEnabled(False)
-        self.afficheMessageBar(f"Les modifications ont été effectués sur : {len(self.dico_champs_avant_modif)} tronçon(s)")
-
 
     def set_enable_widget(self,etat = True):
         for widget_inerface in self.get_widgets("QLineEdit"):
             widget_inerface.setEnabled(etat)
         for widget_inerface in self.get_widgets("QComboBox"):
             widget_inerface.setEnabled(etat)
-
 
     def actualiserSelection(self):
         # gestion de la couleur de selection
@@ -405,12 +286,9 @@ class Assisstant_DFCI:
         else:
             self.set_enable_widget()
 
-
-
         self.dico_champs_modifie.clear()
         # self._list_selection = self.layer.selectedFeatures()
         self.set_info_route_in_label(LIEN_VERS_RTE_NOMMEE)
-
         self.init_widgets_from_selection()
 
     def edit_Change_utilisateur(self,widget_interface):
@@ -439,7 +317,6 @@ class Assisstant_DFCI:
             return
         widget_interface.setStyleSheet(CUSTOM_WIDGETS[1])
 
-
     def chemin_court(self):
         if self.layer.selectedFeatureCount() != 2:
             QMessageBox.warning(None,TITRE,"Veuillez sélectionner 2 tronçons")
@@ -451,7 +328,6 @@ class Assisstant_DFCI:
         self.set_active_layer(LAYER_ESPACE_CO[0])
         self.actualiserSelection()
 
-
     def affiche_sens(self):
         if self.is_affiche_sens_num:
             # self.dlg.pushButtonSensNum.setText("Afficher le sens de numerisation")
@@ -462,17 +338,12 @@ class Assisstant_DFCI:
             self.layer.saveNamedStyle(PATH_REP + "\SENS_NUM\sauvegarde_style_route.qml")
             self.layer.loadNamedStyle(PATH_REP + "\SENS_NUM\style_sens_numerisation.qml")
             self.is_affiche_sens_num = True
-
         self.layer.triggerRepaint()
-
 
     def a_propos(self):
         self.dlgAProposDe.show()
 
     def __init__(self, iface):
-
-        # layer actif
-
         self.dlgAProposDe = None
         self.dlg = None
         self.cheminpluscourt = None
@@ -481,19 +352,12 @@ class Assisstant_DFCI:
         self.layer_route = None
         self.layer_complexe_route = None
         self.iface = iface
-
         self.is_affiche_sens_num = False
 
         # dico des champs modifiés
         # cle = id champs
         # valeur = attributs
         self.dico_champs_modifie = {}
-        # dictionnaire (cle = cleabs de la selection avant modif
-        # valeur = couple de champs et attr avant modif
-        self.dico_champs_avant_modif = {}
-
-        # class du tableur
-        # self.tableur = None
 
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
@@ -508,7 +372,6 @@ class Assisstant_DFCI:
     def unload(self):
         pass
 
-
     def run(self):
         """Run method that performs all the real work"""
 
@@ -522,11 +385,9 @@ class Assisstant_DFCI:
             self.first_start = False
 
             self.dlg = Assisstant_DFCIDialog()
-            self.dlg.setWindowTitle(TITRE)
+            self.dlg.setWindowTitle(f"{TITRE}  {VERSION}")
             self.dlgAProposDe = Aproposde()
             self.dlgAProposDe.pushButtonDoc.clicked.connect(afficheDoc)
-            # tableur
-            # self.tableur = Tableur()
 
             self.dlg.textEdit_info_route.setText("")
             self.dlg.textEdit_info_complexe.setText("")
@@ -537,7 +398,7 @@ class Assisstant_DFCI:
             # a propos de
             self.dlgAProposDe.setWindowFlags(Qt.WindowStaysOnTopHint)
             self.dlg.pushButtonAPropos.clicked.connect(self.a_propos)
-            self.dlgAProposDe.setWindowTitle(TITRE)
+            self.dlgAProposDe.setWindowTitle(f"{TITRE}  {VERSION}")
 
             self.iface.mapCanvas().selectionChanged.connect(self.actualiserSelection)
 
@@ -545,12 +406,6 @@ class Assisstant_DFCI:
                 self.dlg.pushButtonCheminCourt.setEnabled(False)
             self.dlg.pushButtonCheminCourt.clicked.connect(self.chemin_court)
             self.dlg.pushButtonSensNum.clicked.connect(self.affiche_sens)
-            # self.dlg.pushButtonLog.clicked.connect(afficherlog)
-            # self.dlg.pushButtonUndo.clicked.connect(self.undo)
-            self.dlg.pushButtonLog.hide()
-            self.dlg.pushButtonUndo.hide()
-            # self.dlg.pushButtonUndo.setEnabled(False)
-
 
             # evenement des widgets
             for widget_interface in self.get_widgets("QLineEdit"):
