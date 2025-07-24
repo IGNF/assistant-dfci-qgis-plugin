@@ -291,6 +291,9 @@ class Assisstant_DFCI:
         self.set_info_route_in_label(LIEN_VERS_RTE_NOMMEE)
         self.init_widgets_from_selection()
 
+        self.dlg.labelnbselection.setText(f"Vous avez sélectionné : <span style='color: red'><b>{self.layer.selectedFeatureCount()}</b></span> tronçon(s)")
+
+
     def edit_Change_utilisateur(self,widget_interface):
 
         index_champs = self.layer.fields().indexOf(widget_interface.objectName())
@@ -331,12 +334,12 @@ class Assisstant_DFCI:
     def affiche_sens(self):
         if self.is_affiche_sens_num:
             # self.dlg.pushButtonSensNum.setText("Afficher le sens de numerisation")
-            self.layer.loadNamedStyle(PATH_REP + "\SENS_NUM\sauvegarde_style_route.qml")
+            self.layer.loadNamedStyle(os.path.join(PATH_REP ,"SENS_NUM", "sauvegarde_style_route.qml"))
             self.is_affiche_sens_num = False
         else:
             # self.dlg.pushButtonSensNum.setText("Masquer le sens de numerisation")
-            self.layer.saveNamedStyle(PATH_REP + "\SENS_NUM\sauvegarde_style_route.qml")
-            self.layer.loadNamedStyle(PATH_REP + "\SENS_NUM\style_sens_numerisation.qml")
+            self.layer.saveNamedStyle(os.path.join(PATH_REP ,"SENS_NUM", "sauvegarde_style_route.qml"))
+            self.layer.loadNamedStyle(os.path.join(PATH_REP ,"SENS_NUM","style_sens_numerisation.qml"))
             self.is_affiche_sens_num = True
         self.layer.triggerRepaint()
 
@@ -392,6 +395,8 @@ class Assisstant_DFCI:
             self.dlg.textEdit_info_route.setText("")
             self.dlg.textEdit_info_complexe.setText("")
 
+            self.dlg.labelnbselection.setText("")
+
             self.dlg.mColorButton.colorChanged.connect(self.colorchange)
             self.dlg.mColorButton.setColor(self.iface.mapCanvas().selectionColor())
 
@@ -430,8 +435,7 @@ class Assisstant_DFCI:
             self.dlg.pushButtonValider.clicked.connect(self.valider_transaction)
             self.dlg.pushButtonValider.setStyleSheet(CUSTOM_WIDGETS[3])
 
-
-            self.layer.saveNamedStyle(PATH_REP + "\SENS_NUL\sauvegarde_style_route.qml")
+            self.layer.saveNamedStyle(os.path.join(PATH_REP, "SENS_NUM", "sauvegarde_style_route.qml"))
 
             # initialisation des widgets avec tous les attributs du xml
             self.ini_widget()
@@ -446,7 +450,7 @@ class Assisstant_DFCI:
         result = self.dlg.exec_()
         # See if OK was pressed
         if not result:
-            self.layer.loadNamedStyle(PATH_REP + "\SENS_NUM\sauvegarde_style_route.qml")
+            self.layer.loadNamedStyle(os.path.join(PATH_REP, "SENS_NUM", "sauvegarde_style_route.qml"))
             self.layer.triggerRepaint()
             self.dlgAProposDe.hide()
             self.is_affiche_sens_num = False
