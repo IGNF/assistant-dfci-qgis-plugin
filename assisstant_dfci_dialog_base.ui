@@ -810,32 +810,6 @@
      <normaloff>icons/sens_num.PNG</normaloff>icons/sens_num.PNG</iconset>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButtonUndo">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>66</x>
-     <y>540</y>
-     <width>28</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="cursor">
-    <cursorShape>PointingHandCursor</cursorShape>
-   </property>
-   <property name="toolTip">
-    <string>Undo</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>icons/icon_undo.png</normaloff>icons/icon_undo.png</iconset>
-   </property>
-  </widget>
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
@@ -903,28 +877,6 @@
    </property>
    <property name="showMenu">
     <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButtonLog">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>263</x>
-     <y>540</y>
-     <width>28</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="cursor">
-    <cursorShape>PointingHandCursor</cursorShape>
-   </property>
-   <property name="toolTip">
-    <string>Afficher le log</string>
-   </property>
-   <property name="text">
-    <string>log</string>
    </property>
   </widget>
   <widget class="QLabel" name="labelnbselection">
