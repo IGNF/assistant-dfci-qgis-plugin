@@ -441,11 +441,11 @@ class Assisstant_DFCI:
             self.ini_widget()
             self.actualiserSelection()
 
-            # show the dialog
-            self.dlg.setWindowFlags(Qt.WindowStaysOnTopHint| Qt.Tool)
-
-
+        # show the dialog
+        self.dlg.setParent(self.iface.mainWindow())
+        self.dlg.setWindowFlags(Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
         self.dlg.show()
+
         # Run the dialog event loop
         result = self.dlg.exec_()
         # See if OK was pressed
