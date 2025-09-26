@@ -401,7 +401,7 @@ class Assisstant_DFCI:
             self.dlg.mColorButton.setColor(self.iface.mapCanvas().selectionColor())
 
             # a propos de
-            self.dlgAProposDe.setWindowFlags(Qt.WindowStaysOnTopHint)
+            self.dlgAProposDe.setWindowFlags(Qt.WindowStaysOnTopHint|Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
             self.dlg.pushButtonAPropos.clicked.connect(self.a_propos)
             self.dlgAProposDe.setWindowTitle(f"{TITRE}  {VERSION}")
 
