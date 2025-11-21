@@ -2,7 +2,7 @@
 import os
 
 TITRE = "Assisstant DFCI"
-VERSION = "v1.0.0"
+VERSION = "v1.0.1"
 PATH_REP = f"{os.path.dirname(__file__)}"
 
 LAYER_ESPACE_CO = ["troncon_de_route","route_numerotee_ou_nommee"]
