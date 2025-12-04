@@ -6,7 +6,7 @@
 name=IGN Assistant DFCI
 qgisMinimumVersion=3.0
 description=Assistant de saisie DFCI.
-version=1.0.1
+version=1.1.0
 author=Gérôme PECHEUR (IGN)
 email=gerome.pecheur@ign.fr
 
