@@ -24,12 +24,17 @@
 from PIL.features import features
 from PyQt5.QtWidgets import QComboBox, QLineEdit, QLabel
 
-from PyQt5.QtGui import QIntValidator
+from qgis.PyQt.QtCore import NULL
+
+from PyQt5.QtGui import QIntValidator, QColor
 from collections import Counter
+
 from qgis.core import Qgis, QgsMapLayer
 
 from .assisstant_dfci_dialog import Assisstant_DFCIDialog
+from .modele import *
 from .fonction import  *
+from .symbologie import *
 from .cheminpluscourt import *
 import xml.etree.ElementTree as ET
 from .aproposde import Aproposde
@@ -140,6 +145,8 @@ class Assisstant_DFCI:
         routes_nommees = []
         dico_rte_nommee = {}
         for sel in self.layer.selectedFeatures():
+            # if (sel[nom_champs]) == NULL:
+            #     continue
             routes_nommees += sel[nom_champs].split("/")
             # Il faut tester si la valeur existe avant d'enlever sinon plantage
             if "NULL" in routes_nommees:
@@ -291,7 +298,7 @@ class Assisstant_DFCI:
         self.set_info_route_in_label(LIEN_VERS_RTE_NOMMEE)
         self.init_widgets_from_selection()
 
-        self.dlg.labelnbselection.setText(f"Vous avez sélectionné : <span style='color: red'><b>{self.layer.selectedFeatureCount()}</b></span> tronçon(s)")
+        self.dlg.labelnbselection.setText(f"sélection : <span style='color: red'><b>{self.layer.selectedFeatureCount()}</b></span> tronçon(s)")
 
 
     def edit_Change_utilisateur(self,widget_interface):
@@ -333,13 +340,14 @@ class Assisstant_DFCI:
 
     def affiche_sens(self):
         if self.is_affiche_sens_num:
-            self.layer.loadNamedStyle(os.path.join(PATH_REP ,"SENS_NUM", "sauvegarde_style_route.qml"),categories=QgsMapLayer.StyleCategory.Symbology| QgsMapLayer.Labeling)
+            suppr_symb_sens_num(self.layer)
             self.is_affiche_sens_num = False
         else:
-            self.layer.saveNamedStyle(os.path.join(PATH_REP ,"SENS_NUM", "sauvegarde_style_route.qml"),categories=QgsMapLayer.StyleCategory.Symbology| QgsMapLayer.Labeling)
-            self.layer.loadNamedStyle(os.path.join(PATH_REP ,"SENS_NUM","style_sens_numerisation.qml"),categories=QgsMapLayer.StyleCategory.Symbology| QgsMapLayer.Labeling)
+            add_symb_sens_num(self.layer)
             self.is_affiche_sens_num = True
         self.layer.triggerRepaint()
+        self.iface.mapCanvas().refresh()
+
 
     def a_propos(self):
         self.dlgAProposDe.show()
@@ -379,13 +387,24 @@ class Assisstant_DFCI:
         # est ce que les layer de l'espace co sont disponibles
         if not self.islayer_espaceco():
             return
+
         self.set_active_layer(LAYER_ESPACE_CO[0])
+        self.dlg = Assisstant_DFCIDialog()
+
+        # ******************************
+        champs_manquant,champs_readonly = test_modele(self.layer)
+        self.dlg.pushButton_warning.clicked.connect(lambda: config_modele(champs_manquant, champs_readonly))
+        # self.dlg.pushButton_warning.hide()
+        if len(champs_manquant) == 0:
+            self.dlg.pushButton_warning.setStyleSheet("qproperty-icon: none;")
+        # ******************************
+
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start:
             self.first_start = False
 
-            self.dlg = Assisstant_DFCIDialog()
+
             self.dlg.setWindowTitle(f"{TITRE}  {VERSION}")
             self.dlgAProposDe = Aproposde()
             self.dlgAProposDe.pushButtonDoc.clicked.connect(afficheDoc)
@@ -433,7 +452,7 @@ class Assisstant_DFCI:
             self.dlg.pushButtonValider.clicked.connect(self.valider_transaction)
             self.dlg.pushButtonValider.setStyleSheet(CUSTOM_WIDGETS[3])
 
-            self.layer.saveNamedStyle(os.path.join(PATH_REP, "SENS_NUM", "sauvegarde_style_route.qml"))
+            # self.layer.saveNamedStyle(os.path.join(PATH_REP, "SENS_NUM", "sauvegarde_style_route.qml"))
 
             # initialisation des widgets avec tous les attributs du xml
             self.ini_widget()
@@ -448,7 +467,7 @@ class Assisstant_DFCI:
         result = self.dlg.exec_()
         # See if OK was pressed
         if not result:
-            self.layer.loadNamedStyle(os.path.join(PATH_REP, "SENS_NUM", "sauvegarde_style_route.qml"),categories=QgsMapLayer.StyleCategory.Symbology| QgsMapLayer.Labeling)
+            suppr_symb_sens_num(self.layer)
             self.layer.triggerRepaint()
             self.dlgAProposDe.hide()
             self.is_affiche_sens_num = False
