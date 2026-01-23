@@ -6,7 +6,7 @@
 name=IGN Assistant DFCI
 qgisMinimumVersion=3.0
 description=Assistant de saisie DFCI.
-version=1.0.0
+version=1.1.0
 author=Gérôme PECHEUR (IGN)
 email=gerome.pecheur@ign.fr
 
@@ -20,9 +20,8 @@ about=Assistant de saisie DFCI
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-changelog=
-	v 0.1 : version initiale
-	v 0.2 : version après recette
+#changelog=
+	
 
 # Tags are comma separated with spaces allowed
 tags=python
