@@ -21,7 +21,12 @@ jobs:
 
       - name: Build plugin zip
         run: |
-          zip -r "IGN_assistant-dfci.zip" . -x ".git/*" ".github/*"
+          mkdir -p IGN_assistant-dfci
+          rsync -av --progress . IGN_assistant-dfci/ \
+            --exclude .git \
+            --exclude .github \
+            --exclude IGN_assistant-dfci
+          zip -r IGN_assistant-dfci.zip IGN_assistant-dfci
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
