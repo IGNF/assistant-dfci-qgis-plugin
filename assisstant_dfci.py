@@ -368,9 +368,6 @@ class Assisstant_DFCI:
         # valeur = attributs
         self.dico_champs_modifie = {}
 
-        # Check if plugin was started the first time in current QGIS session
-        # Must be set in initGui() to survive plugin reloads
-        self.first_start = True
 
     def colorchange(self):
         self.actualiserSelection()
@@ -382,83 +379,78 @@ class Assisstant_DFCI:
         pass
 
     def run(self):
-        """Run method that performs all the real work"""
+        if self.dlg is not None:
+            return
 
         # est ce que les layer de l'espace co sont disponibles
         if not self.islayer_espaceco():
             return
 
 
+        self.set_active_layer(LAYER_ESPACE_CO[0])
+        self.dlg = Assisstant_DFCIDialog()
 
-        # Create the dialog with elements (after translation) and keep reference
-        # Only create GUI ONCE in callback, so that it will only load when the plugin is started
-        if self.first_start:
-            self.first_start = False
-
-            self.set_active_layer(LAYER_ESPACE_CO[0])
-            self.dlg = Assisstant_DFCIDialog()
-
-            # ******************************
-            champs_manquant, champs_readonly = test_modele(self.layer)
-            self.dlg.pushButton_warning.clicked.connect(lambda: config_modele(champs_manquant, champs_readonly))
-            # self.dlg.pushButton_warning.hide()
-            if len(champs_manquant) == 0:
-                self.dlg.pushButton_warning.setStyleSheet("qproperty-icon: none;")
-            # ******************************
+        # ******************************
+        champs_manquant, champs_readonly = test_modele(self.layer)
+        self.dlg.pushButton_warning.clicked.connect(lambda: config_modele(champs_manquant, champs_readonly))
+        # self.dlg.pushButton_warning.hide()
+        if len(champs_manquant) == 0:
+            self.dlg.pushButton_warning.setStyleSheet("qproperty-icon: none;")
+        # ******************************
 
 
-            self.dlg.setWindowTitle(f"{TITRE}  {VERSION}")
-            self.dlgAProposDe = Aproposde()
-            self.dlgAProposDe.pushButtonDoc.clicked.connect(afficheDoc)
+        self.dlg.setWindowTitle(f"{TITRE}")
+        self.dlgAProposDe = Aproposde()
+        self.dlgAProposDe.pushButtonDoc.clicked.connect(afficheDoc)
 
-            self.dlg.textEdit_info_route.setText("")
-            self.dlg.textEdit_info_complexe.setText("")
+        self.dlg.textEdit_info_route.setText("")
+        self.dlg.textEdit_info_complexe.setText("")
 
-            self.dlg.labelnbselection.setText("")
+        self.dlg.labelnbselection.setText("")
 
-            self.dlg.mColorButton.colorChanged.connect(self.colorchange)
-            self.dlg.mColorButton.setColor(self.iface.mapCanvas().selectionColor())
+        self.dlg.mColorButton.colorChanged.connect(self.colorchange)
+        self.dlg.mColorButton.setColor(self.iface.mapCanvas().selectionColor())
 
-            # a propos de
-            self.dlgAProposDe.setWindowFlags(Qt.WindowStaysOnTopHint|Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
-            self.dlg.pushButtonAPropos.clicked.connect(self.a_propos)
-            self.dlgAProposDe.setWindowTitle(f"{TITRE}  {VERSION}")
+        # a propos de
+        self.dlgAProposDe.setWindowFlags(Qt.WindowStaysOnTopHint|Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
+        self.dlg.pushButtonAPropos.clicked.connect(self.a_propos)
+        self.dlgAProposDe.setWindowTitle(f"{TITRE}")
 
-            self.iface.mapCanvas().selectionChanged.connect(self.actualiserSelection)
+        self.iface.mapCanvas().selectionChanged.connect(self.actualiserSelection)
 
-            if self.layer.selectedFeatureCount() !=2:
-                self.dlg.pushButtonCheminCourt.setEnabled(False)
-            self.dlg.pushButtonCheminCourt.clicked.connect(self.chemin_court)
-            self.dlg.pushButtonSensNum.clicked.connect(self.affiche_sens)
+        if self.layer.selectedFeatureCount() !=2:
+            self.dlg.pushButtonCheminCourt.setEnabled(False)
+        self.dlg.pushButtonCheminCourt.clicked.connect(self.chemin_court)
+        self.dlg.pushButtonSensNum.clicked.connect(self.affiche_sens)
 
-            # evenement des widgets
-            for widget_interface in self.get_widgets("QLineEdit"):
-                widget_interface.textChanged.connect(lambda _, w1=widget_interface :self.widgetChange(w1))
-                widget_interface.setValidator(QIntValidator())
-            for widget_interface in self.get_widgets("QComboBox"):
-                widget_interface.currentTextChanged.connect(lambda _, w2=widget_interface :self.widgetChange(w2))
+        # evenement des widgets
+        for widget_interface in self.get_widgets("QLineEdit"):
+            widget_interface.textChanged.connect(lambda _, w1=widget_interface :self.widgetChange(w1))
+            widget_interface.setValidator(QIntValidator())
+        for widget_interface in self.get_widgets("QComboBox"):
+            widget_interface.currentTextChanged.connect(lambda _, w2=widget_interface :self.widgetChange(w2))
 
-            # modif par l'utilisateur line edit
-            for widget_interface in self.get_widgets("QLineEdit"):
-                # textedited : changement par l'utilisateur, donc autre que par setText()
-                widget_interface.textEdited.connect(lambda _, w3=widget_interface :self.edit_Change_utilisateur(w3))
+        # modif par l'utilisateur line edit
+        for widget_interface in self.get_widgets("QLineEdit"):
+            # textedited : changement par l'utilisateur, donc autre que par setText()
+            widget_interface.textEdited.connect(lambda _, w3=widget_interface :self.edit_Change_utilisateur(w3))
 
-            #  modif par l'utilisateur combobox
-            for widget_interface in self.get_widgets("QComboBox"):
-                widget_interface.activated.connect(lambda _, w3=widget_interface: self.combo_Change_utilisateur(w3))
+        #  modif par l'utilisateur combobox
+        for widget_interface in self.get_widgets("QComboBox"):
+            widget_interface.activated.connect(lambda _, w3=widget_interface: self.combo_Change_utilisateur(w3))
 
 
-            for widget_interface in self.get_widgets("QLabel"):
-                widget_interface.setStyleSheet(CUSTOM_WIDGETS[4])
+        for widget_interface in self.get_widgets("QLabel"):
+            widget_interface.setStyleSheet(CUSTOM_WIDGETS[4])
 
-            self.dlg.pushButtonValider.clicked.connect(self.valider_transaction)
-            self.dlg.pushButtonValider.setStyleSheet(CUSTOM_WIDGETS[3])
+        self.dlg.pushButtonValider.clicked.connect(self.valider_transaction)
+        self.dlg.pushButtonValider.setStyleSheet(CUSTOM_WIDGETS[3])
 
-            # self.layer.saveNamedStyle(os.path.join(PATH_REP, "SENS_NUM", "sauvegarde_style_route.qml"))
+        # self.layer.saveNamedStyle(os.path.join(PATH_REP, "SENS_NUM", "sauvegarde_style_route.qml"))
 
-            # initialisation des widgets avec tous les attributs du xml
-            self.ini_widget()
-            self.actualiserSelection()
+        # initialisation des widgets avec tous les attributs du xml
+        self.ini_widget()
+        self.actualiserSelection()
 
         # show the dialog
         self.dlg.setParent(self.iface.mainWindow())
@@ -469,8 +461,16 @@ class Assisstant_DFCI:
         result = self.dlg.exec_()
         # See if OK was pressed
         if not result:
+            # on deconnecte le signal en quittant
+            try:
+                self.iface.mapCanvas().selectionChanged.disconnect(self.actualiserSelection)
+            except TypeError:
+                pass  # aucune connexion existante
             suppr_symb_sens_num(self.layer)
             self.layer.triggerRepaint()
             self.dlgAProposDe.hide()
             self.is_affiche_sens_num = False
+
+            # on réinitialise pour gere le rechargement si une seule instance
+            self.dlg = None
 
