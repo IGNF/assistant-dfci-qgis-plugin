@@ -86,7 +86,8 @@ Allez dans Extensions/Installer/Gérer les extensions, cliquez sur Installer dep
   <h2 id="4-présentation" style="color: #00ADC5">4. Présentation</h2>
 </div>  
   
-
+  
+  
 <div  style="text-align: center;"> 
 	<img  src="Image5.png" height="300"/> 
 </div>  
@@ -134,7 +135,7 @@ Seuls les attributs communs à tous les tronçons sont représentés en vert.
 Une fois les tronçons sélectionnés, il suffit de choisir le ou les attributs à modifier parmi les valeurs possibles ou éditables.  
 
 <div  style="text-align: center;"> 
-	<img  src="Image11.jpg" height = 300/> 
+	<img  src="Image11.png" height = 300/> 
 </div>
 
 
@@ -157,6 +158,10 @@ Un message QGIS confirme la prise en compte des modifications.
 
 Accessible via le bouton ![Image16](Image16.png)  
 
-![Image17](Image17.png)  
+ 
+<div  style="text-align: center;"> 
+	<img  src="IImage17.png" /> 
+</div>  
+
 
 Cette boîte permet de suivre l’historique des différentes versions ainsi que d’afficher la documentation.  
