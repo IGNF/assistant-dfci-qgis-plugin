@@ -87,7 +87,7 @@ Allez dans Extensions/Installer/Gérer les extensions, cliquez sur Installer dep
 </div>  
   
   
-  
+
 <div  style="text-align: center;"> 
 	<img  src="Image5.png" height="300"/> 
 </div>  
@@ -160,7 +160,7 @@ Accessible via le bouton ![Image16](Image16.png)
 
  
 <div  style="text-align: center;"> 
-	<img  src="IImage17.png" /> 
+	<img  src="Image17.png" /> 
 </div>  
 
 
