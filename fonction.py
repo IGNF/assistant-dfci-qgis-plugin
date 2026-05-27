@@ -7,11 +7,7 @@ from .constante import *
 import subprocess
 
 def afficheDoc():
-    fichier = os.path.join(os.path.dirname(__file__), "assistant dfci.pdf")
-    if not os.path.isfile(fichier):
-        afficheerreur("La documentation est introuvable", "Information")
-    else:
-        subprocess.Popen(['start', '', fichier], shell=True)
+    webbrowser.open("https://ignf.github.io/assistant-dfci-qgis-plugin/")
 
 def afficheerreur(text, titre=TITRE):
     msg = QMessageBox()
