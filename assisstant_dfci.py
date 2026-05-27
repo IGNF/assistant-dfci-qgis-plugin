@@ -382,7 +382,7 @@ class Assisstant_DFCI:
         if self.dlg is not None:
             return
 
-        # est ce que les layer de l'espace co sont disponibles
+        # est-ce que les layer de l'espace co sont disponibles
         if not self.islayer_espaceco():
             return
 
