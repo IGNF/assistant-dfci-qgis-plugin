@@ -24,7 +24,7 @@
 from qgis.PyQt.QtWidgets import QComboBox, QLineEdit
 from qgis.utils import plugins
 from qgis.PyQt.QtGui import QIntValidator, QGuiApplication
-from qgis.core import Qgis,QgsProject
+from qgis.core import Qgis,QgsProject,NULL
 
 from collections import Counter
 
@@ -154,6 +154,8 @@ class Assisstant_DFCI:
         for sel in self.layer.selectedFeatures():
             # if (sel[nom_champs]) == NULL:
             #     continue
+            if sel[nom_champs] is None or sel[nom_champs] == NULL or str(sel[nom_champs]).strip() == "":
+                continue
             routes_nommees += sel[nom_champs].split("/")
             # Il faut tester si la valeur existe avant d'enlever sinon plantage
             if "NULL" in routes_nommees:
