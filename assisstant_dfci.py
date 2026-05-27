@@ -21,21 +21,20 @@
  *                                                                         *
  ***************************************************************************/
 """
-
 from qgis.PyQt.QtWidgets import QComboBox, QLineEdit
-
 from qgis.utils import plugins
-
 from qgis.PyQt.QtGui import QIntValidator, QGuiApplication
-from collections import Counter
-
 from qgis.core import Qgis
+
+from collections import Counter
 
 from .assisstant_dfci_dialog import Assisstant_DFCIDialog
 from .modele import *
 from .fonction import  *
-import xml.etree.ElementTree as ET
+from .mapping_version import *
 from .aproposde import Aproposde
+
+import xml.etree.ElementTree as ET
 
 class Assisstant_DFCI:
     """
@@ -260,7 +259,7 @@ class Assisstant_DFCI:
         if len(self.dico_champs_modifie) == 0:
             return
 
-        QGuiApplication.setOverrideCursor(Qt.WaitCursor)
+        QGuiApplication.setOverrideCursor(WaitCursor)
         self.layer.startEditing()
         for sel in self.layer.selectedFeatures():
 
@@ -408,7 +407,7 @@ class Assisstant_DFCI:
         self.dlg.mColorButton.setColor(self.iface.mapCanvas().selectionColor())
 
         # a propos de
-        self.dlgAProposDe.setWindowFlags(Qt.WindowStaysOnTopHint|Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
+        self.dlgAProposDe.setWindowFlags(WindowStaysOnTopHint|WindowTitleHint | WindowCloseButtonHint)
         self.dlg.pushButtonAPropos.clicked.connect(self.a_propos)
         self.dlgAProposDe.setWindowTitle(f"{TITRE}")
 
@@ -450,11 +449,11 @@ class Assisstant_DFCI:
 
         # show the dialog
         self.dlg.setParent(self.iface.mainWindow())
-        self.dlg.setWindowFlags(Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
+        self.dlg.setWindowFlags(Dialog | WindowTitleHint | WindowCloseButtonHint)
         self.dlg.show()
 
         # Run the dialog event loop
-        result = self.dlg.exec_()
+        result = self.dlg.exec()
         # See if OK was pressed
         if not result:
             # on deconnecte le signal en quittant
