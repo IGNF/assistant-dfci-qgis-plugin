@@ -6,14 +6,16 @@
 name=IGN Assistant DFCI
 qgisMinimumVersion=3.0
 description=Assistant de saisie DFCI.
-version=1.2.0
+version=1.2.0_recette
 author=Gérôme PECHEUR (IGN)
 email=gerome.pecheur@ign.fr
+license=GNU AGPL v3
 
 about=Assistant de saisie DFCI
 
-#tracker=http://bug
-#repository=http://repo
+homepage=https://ignf.github.io/assistant-dfci-qgis-plugin/
+tracker=https://github.com/IGNF/assistant-dfci-qgis-plugin/issues
+repository=https://github.com/IGNF/assistant-dfci-qgis-plugin
 # End of mandatory metadata
 
 # Recommended items:
@@ -26,7 +28,7 @@ hasProcessingProvider=no
 # Tags are comma separated with spaces allowed
 tags=python
 
-#homepage=http://home
+
 category=Plugins
 icon=icons/icon_principal.png
 # experimental flag
