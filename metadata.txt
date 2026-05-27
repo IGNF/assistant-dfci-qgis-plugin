@@ -5,6 +5,7 @@
 [general]
 name=IGN Assistant DFCI
 qgisMinimumVersion=3.0
+qgisMaximumVersion=4.99
 description=Assistant de saisie DFCI.
 version=1.2.0_recette
 author=Gérôme PECHEUR (IGN)
