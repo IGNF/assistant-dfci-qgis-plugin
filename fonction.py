@@ -5,6 +5,7 @@ from qgis.PyQt.QtCore import Qt
 from qgis.core import QgsCoordinateReferenceSystem, QgsProject
 from .constante import *
 import subprocess
+import webbrowser
 
 def afficheDoc():
     webbrowser.open("https://ignf.github.io/assistant-dfci-qgis-plugin/")
