@@ -1,4 +1,4 @@
-from qgis.PyQt.QtWidgets import QMessageBox
+from qgis.PyQt.QtWidgets import QMessageBox,QTextEdit
 from qgis.PyQt.QtCore import Qt
 
 # QT6
@@ -15,21 +15,21 @@ try :
     # MatchExactly = Qt.MatchFlag.MatchExactly
     # RightSide = QTabBar.ButtonPosition.RightSide
     # LeftSide = QTabBar.ButtonPosition.LeftSide
-    # Warning = QMessageBox.Icon.Warning
-    # YesRole = QMessageBox.ButtonRole.YesRole
-    # AcceptRole = QMessageBox.ButtonRole.AcceptRole
+    Warning = QMessageBox.Icon.Warning
+    YesRole = QMessageBox.ButtonRole.YesRole
+    AcceptRole = QMessageBox.ButtonRole.AcceptRole
+    Ok = QMessageBox.StandardButton.Ok
     # NoSelection = QAbstractItemView.SelectionMode.NoSelection
     # NoFocus = Qt.FocusPolicy.NoFocus
     # DisplayRole = Qt.ItemDataRole.DisplayRole
     # BackgroundRole = Qt.ItemDataRole.BackgroundRole
     # RightButton = Qt.MouseButton.RightButton
     # NoContextMenu = Qt.ContextMenuPolicy.NoContextMenu
-    # AlignCenter = Qt.AlignmentFlag.AlignCenter
+    AlignCenter = Qt.AlignmentFlag.AlignCenter
     WaitCursor = Qt.CursorShape.WaitCursor
     # AscendingOrder = QtCore.Qt.SortOrder.AscendingOrder
-    Warning = QMessageBox.Icon.Warning
-    YesRole = QMessageBox.ButtonRole.YesRole
-    AcceptRole = QMessageBox.ButtonRole.AcceptRole
+    NoWrap = QTextEdit.LineWrapMode.NoWrap
+
 # QT5
 except :
     Dialog = Qt.Dialog
@@ -44,18 +44,17 @@ except :
     # MatchExactly = Qt.MatchFlag.MatchExactly
     # RightSide = QTabBar.RightSide
     # LeftSide = QTabBar.LeftSide
-    # Warning = QMessageBox.Warning
-    # YesRole = QMessageBox.YesRole
-    # AcceptRole = QMessageBox.AcceptRole
+    Warning = QMessageBox.Warning
+    YesRole = QMessageBox.YesRole
+    AcceptRole = QMessageBox.AcceptRole
+    Ok = QMessageBox.Ok
     # NoSelection = QListWidget.NoSelection
     # NoFocus = Qt.NoFocus
     # DisplayRole = Qt.DisplayRole
     # BackgroundRole = Qt.BackgroundRole
     # RightButton = Qt.RightButton
     # NoContextMenu = Qt.NoContextMenu
-    # AlignCenter = Qt.AlignCenter
+    AlignCenter = Qt.AlignCenter
     WaitCursor = Qt.WaitCursor
     # AscendingOrder = QtCore.Qt.AscendingOrder
-    Warning = QMessageBox.Warning
-    YesRole = QMessageBox.YesRole
-    AcceptRole = QMessageBox.AcceptRole
+    NoWrap = QTextEdit.NoWrap

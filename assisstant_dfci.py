@@ -24,7 +24,7 @@
 from qgis.PyQt.QtWidgets import QComboBox, QLineEdit
 from qgis.utils import plugins
 from qgis.PyQt.QtGui import QIntValidator, QGuiApplication
-from qgis.core import Qgis
+from qgis.core import Qgis,QgsProject
 
 from collections import Counter
 

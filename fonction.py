@@ -11,7 +11,7 @@ def afficheerreur(text, titre=TITRE):
     msg = QMessageBox()
     msg.setIcon(Warning)
     msg.setWindowTitle(titre)
-    msg.setStandardButtons(QMessageBox.Ok)
+    msg.setStandardButtons(Ok)
     msg.setText(text)
     msg.setWindowFlags(WindowStaysOnTopHint)
     msg.setFixedSize(msg.size())
