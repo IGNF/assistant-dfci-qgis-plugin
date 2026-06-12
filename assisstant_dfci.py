@@ -21,29 +21,36 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PIL.features import features
-from PyQt5.QtWidgets import QComboBox, QLineEdit, QLabel
+from qgis.PyQt.QtWidgets import QComboBox, QLineEdit
+from qgis.utils import plugins
+from qgis.PyQt.QtGui import QIntValidator, QGuiApplication
+from qgis.core import Qgis,QgsProject,NULL
 
-from qgis.PyQt.QtCore import NULL
-
-from PyQt5.QtGui import QIntValidator, QColor
 from collections import Counter
-
-from qgis.core import Qgis, QgsMapLayer
 
 from .assisstant_dfci_dialog import Assisstant_DFCIDialog
 from .modele import *
 from .fonction import  *
-from .symbologie import *
-from .cheminpluscourt import *
-import xml.etree.ElementTree as ET
+from .mapping_version import *
 from .aproposde import Aproposde
+
+import xml.etree.ElementTree as ET
 
 class Assisstant_DFCI:
     """
     IMPORTANT : le nom (objectName) des CComboBox doivent avoir une correspondance
     avec un champs dans le xml.
     """
+
+    def runchepluscourt(self):
+        try:
+            processing_plugin = plugins[PLUGIN_CHE_PLUS_COURT]
+            processing_plugin.run()
+        except KeyError:
+            QMessageBox.warning(None, "Attention",
+                f"Le plugin {PLUGIN_CHE_PLUS_COURT} n'est pas installé ou pas activé\n"
+                f"- Veuillez l'activer dans le menu \"Installer/Gérer les extensions de QGIS\"")
+
     # retourne la liste des widgets dans le formlayout
     def get_widgets(self,type_widget = "ALL"):
         list_combo = []
@@ -147,6 +154,8 @@ class Assisstant_DFCI:
         for sel in self.layer.selectedFeatures():
             # if (sel[nom_champs]) == NULL:
             #     continue
+            if sel[nom_champs] is None or sel[nom_champs] == NULL or str(sel[nom_champs]).strip() == "":
+                continue
             routes_nommees += sel[nom_champs].split("/")
             # Il faut tester si la valeur existe avant d'enlever sinon plantage
             if "NULL" in routes_nommees:
@@ -252,7 +261,7 @@ class Assisstant_DFCI:
         if len(self.dico_champs_modifie) == 0:
             return
 
-        QGuiApplication.setOverrideCursor(Qt.WaitCursor)
+        QGuiApplication.setOverrideCursor(WaitCursor)
         self.layer.startEditing()
         for sel in self.layer.selectedFeatures():
 
@@ -327,26 +336,15 @@ class Assisstant_DFCI:
             return
         widget_interface.setStyleSheet(CUSTOM_WIDGETS[1])
 
-    def chemin_court(self):
-        if self.layer.selectedFeatureCount() != 2:
-            QMessageBox.warning(None,TITRE,"Veuillez sélectionner 2 tronçons")
-            return
-            # instanciation de la class dhemin le plus court
-        self.cheminpluscourt = cheminpluscourt(self.iface, self.layer)
-        self.cheminpluscourt.cheminpluscourt()
-
-        self.set_active_layer(LAYER_ESPACE_CO[0])
-        self.actualiserSelection()
 
     def affiche_sens(self):
-        if self.is_affiche_sens_num:
-            suppr_symb_sens_num(self.layer)
-            self.is_affiche_sens_num = False
-        else:
-            add_symb_sens_num(self.layer)
-            self.is_affiche_sens_num = True
-        self.layer.triggerRepaint()
-        self.iface.mapCanvas().refresh()
+        try:
+            processing_plugin = plugins[PLUGIN_CHE_SENS_NUM]
+            processing_plugin.run()
+        except KeyError:
+            QMessageBox.warning(None, "Attention",
+                                f"Le plugin {PLUGIN_CHE_SENS_NUM} n'est pas installé ou pas activé\n"
+                                f"- Veuillez l'activer dans le menu \"Installer/Gérer les extensions de QGIS\"")
 
 
     def a_propos(self):
@@ -355,7 +353,6 @@ class Assisstant_DFCI:
     def __init__(self, iface):
         self.dlgAProposDe = None
         self.dlg = None
-        self.cheminpluscourt = None
         self.layer = None
 
         self.layer_route = None
@@ -382,7 +379,7 @@ class Assisstant_DFCI:
         if self.dlg is not None:
             return
 
-        # est ce que les layer de l'espace co sont disponibles
+        # est-ce que les layer de l'espace co sont disponibles
         if not self.islayer_espaceco():
             return
 
@@ -412,7 +409,7 @@ class Assisstant_DFCI:
         self.dlg.mColorButton.setColor(self.iface.mapCanvas().selectionColor())
 
         # a propos de
-        self.dlgAProposDe.setWindowFlags(Qt.WindowStaysOnTopHint|Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
+        self.dlgAProposDe.setWindowFlags(WindowStaysOnTopHint|WindowTitleHint | WindowCloseButtonHint)
         self.dlg.pushButtonAPropos.clicked.connect(self.a_propos)
         self.dlgAProposDe.setWindowTitle(f"{TITRE}")
 
@@ -420,7 +417,7 @@ class Assisstant_DFCI:
 
         if self.layer.selectedFeatureCount() !=2:
             self.dlg.pushButtonCheminCourt.setEnabled(False)
-        self.dlg.pushButtonCheminCourt.clicked.connect(self.chemin_court)
+        self.dlg.pushButtonCheminCourt.clicked.connect(self.runchepluscourt)
         self.dlg.pushButtonSensNum.clicked.connect(self.affiche_sens)
 
         # evenement des widgets
@@ -454,11 +451,11 @@ class Assisstant_DFCI:
 
         # show the dialog
         self.dlg.setParent(self.iface.mainWindow())
-        self.dlg.setWindowFlags(Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
+        self.dlg.setWindowFlags(Dialog | WindowTitleHint | WindowCloseButtonHint)
         self.dlg.show()
 
         # Run the dialog event loop
-        result = self.dlg.exec_()
+        result = self.dlg.exec()
         # See if OK was pressed
         if not result:
             # on deconnecte le signal en quittant
@@ -466,10 +463,17 @@ class Assisstant_DFCI:
                 self.iface.mapCanvas().selectionChanged.disconnect(self.actualiserSelection)
             except TypeError:
                 pass  # aucune connexion existante
-            suppr_symb_sens_num(self.layer)
+
+            # si on quitte, on remet la vue sans le sens de numérisation via le plugin
+            try:
+                processing_plugin = plugins[PLUGIN_CHE_SENS_NUM]
+                processing_plugin.suppr_symb_sens_num(self.layer)
+            except:
+                pass
+
             self.layer.triggerRepaint()
-            self.dlgAProposDe.hide()
-            self.is_affiche_sens_num = False
+            self.dlgAProposDe.close()
+
 
             # on réinitialise pour gere le rechargement si une seule instance
             self.dlg = None
