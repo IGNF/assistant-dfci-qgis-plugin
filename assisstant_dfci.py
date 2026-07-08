@@ -385,6 +385,16 @@ class Assisstant_DFCI:
     def on_dialog_closed(self):
         sauve_position_dial(self.dlg)
         self.dlg = None
+        try:
+            self.iface.mapCanvas().selectionChanged.disconnect(self.actualiserSelection)
+        except TypeError:
+            pass
+        # si on quitte, on remet la vue sans le sens de numérisation via le plugin
+        try:
+            processing_plugin = plugins[PLUGIN_SENS_NUM]
+            processing_plugin.suppr_symb_sens_num(self.layer)
+        except:
+            pass
 
     def fermeture_qgis(self):
         sauve_position_dial(self.dlg)
@@ -470,28 +480,4 @@ class Assisstant_DFCI:
         self.dlg.setParent(self.iface.mainWindow())
         self.dlg.setWindowFlags(Dialog | WindowTitleHint | WindowCloseButtonHint)
         self.dlg.show()
-
-        # Run the dialog event loop
-        # result = self.dlg.exec()
-        # # See if OK was pressed
-        # if not result:
-        #     # on deconnecte le signal en quittant
-        #     try:
-        #         self.iface.mapCanvas().selectionChanged.disconnect(self.actualiserSelection)
-        #     except TypeError:
-        #         pass  # aucune connexion existante
-        #
-        #     # si on quitte, on remet la vue sans le sens de numérisation via le plugin
-        #     try:
-        #         processing_plugin = plugins[PLUGIN_SENS_NUM]
-        #         processing_plugin.suppr_symb_sens_num(self.layer)
-        #     except:
-        #         pass
-        #
-        #     self.layer.triggerRepaint()
-        #     self.dlgAProposDe.close()
-        #
-        #
-        #     # on réinitialise pour gere le rechargement si une seule instance
-        #     self.dlg = None
 
