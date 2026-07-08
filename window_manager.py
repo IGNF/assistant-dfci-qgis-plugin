@@ -1,6 +1,6 @@
-from qgis.PyQt.QtCore import QPoint, QSize,QSettings
+from qgis.PyQt.QtCore import QPoint
 from qgis.PyQt.QtWidgets import QApplication
-from .constantes import *
+from .constante import *
 from .mapping_version import *
 
 
