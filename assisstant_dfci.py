@@ -33,6 +33,7 @@ from .modele import *
 from .fonction import  *
 from .mapping_version import *
 from .aproposde import Aproposde
+from .
 
 import xml.etree.ElementTree as ET
 
@@ -339,11 +340,11 @@ class Assisstant_DFCI:
 
     def affiche_sens(self):
         try:
-            processing_plugin = plugins[PLUGIN_CHE_SENS_NUM]
+            processing_plugin = plugins[PLUGIN_SENS_NUM]
             processing_plugin.run()
         except KeyError:
             QMessageBox.warning(None, "Attention",
-                                f"Le plugin {PLUGIN_CHE_SENS_NUM} n'est pas installé ou pas activé\n"
+                                f"Le plugin {PLUGIN_SENS_NUM} n'est pas installé ou pas activé\n"
                                 f"- Veuillez l'activer dans le menu \"Installer/Gérer les extensions de QGIS\"")
 
 
@@ -466,7 +467,7 @@ class Assisstant_DFCI:
 
             # si on quitte, on remet la vue sans le sens de numérisation via le plugin
             try:
-                processing_plugin = plugins[PLUGIN_CHE_SENS_NUM]
+                processing_plugin = plugins[PLUGIN_SENS_NUM]
                 processing_plugin.suppr_symb_sens_num(self.layer)
             except:
                 pass

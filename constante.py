@@ -6,8 +6,8 @@ TITRE = "Assisstant DFCI"
 PATH_REP = f"{os.path.dirname(__file__)}"
 
 LAYER_ESPACE_CO = ["troncon_de_route","route_numerotee_ou_nommee"]
-PLUGIN_CHE_PLUS_COURT = "IGN_chemin_le_plus_court"
-PLUGIN_CHE_SENS_NUM = "IGN_sens_numerisation"
+PLUGIN_CHE_PLUS_COURT = "IGN_ShortestPath"
+PLUGIN_SENS_NUM = "IGN_DigitizingDirection"
 
 LIEN_VERS_RTE_NOMMEE = "liens_vers_route_nommee"
 
