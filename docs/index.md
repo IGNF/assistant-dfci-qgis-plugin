@@ -10,7 +10,7 @@ style="width:1.38681in;height:1.47153in"
 alt="logo_IGN_pour_lettre" /></td>
 <td style="font-size: 24px;text-align: center;"><p><strong>Manuel utilisateur du plugin
 « Assistant DFCI »</strong></p>
-<p><strong>V1.2.1</strong></p></td>
+<p><strong>V1.2.2</strong></p></td>
 </tr>
 <tr>
 <td style="font-size: 16px;text-align: center;">Développeur  : Gérôme PECHEUR (IGN)</td>
@@ -40,14 +40,12 @@ alt="logo_IGN_pour_lettre" /></td>
 
 Version de QGIS 3 : 3.28 ou supérieure.  
 - Ce plugin fonctionne en parallèle du plugin « IGN Espace collaboratif »  
-- Le plugin « maitre » doit préalablement être installé : 
-[maitre-qgis-plugin sur GitHub](https://github.com/IGNF/maitre-qgis-plugin/releases/download/version_finale/plugin_maitre.zip) 
-- Le plugin « Sens de numérisation » doit préalablement être installé : 
-[sens_numerisation-qgis-plugin
-](https://github.com/IGNF/sens_numerisation-qgis-plugin/releases/download/version_finale/IGN_sens_numerisation.zip) 
-- Le plugin « Chemin le plus court » doit préalablement être installé : 
-[chemin-le-plus-court-qgis-plugin
-](https://github.com/IGNF/chemin-le-plus-court-qgis-plugin/releases/download/version_finale/IGN_chemin_le_plus_court.zip) 
+- Le plugin « PluginsManager » doit préalablement être installé : 
+[PluginsManager-qgis-plugin sur GitHub](https://github.com/IGNF/PluginsManager-qgis-plugin/releases/download/version_finale/PluginsManager.zip) 
+- Le plugin « IGN_DigitizingDirection » doit préalablement être installé : 
+[DigitizingDirection-qgis-plugin](https://github.com/IGNF/DigitizingDirection-qgis-plugin/releases/download/version_finale/IGN_DigitizingDirection.zip) 
+- Le plugin « IGN_ShortestPath » doit préalablement être installé : 
+[ShortestPath-qgis-plugin](https://github.com/IGNF/ShortestPath-qgis-plugin/releases/download/version_finale/IGN_ShortestPath.zip) 
 - Ce plugin fonctionne uniquement avec des couches de la BDTopo, dans QGIS le nom de la couche route doit obligatoirement se nommer : « troncon_de_route ».  
 
 Si le package « openpyxl » n’est pas installé sur le poste, le message d’erreur ci-dessous apparaît lors d’une transaction.  

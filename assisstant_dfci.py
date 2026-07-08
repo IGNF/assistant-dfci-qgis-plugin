@@ -24,16 +24,15 @@
 from qgis.PyQt.QtWidgets import QComboBox, QLineEdit
 from qgis.utils import plugins
 from qgis.PyQt.QtGui import QIntValidator, QGuiApplication
-from qgis.core import Qgis,QgsProject,NULL
+from qgis.core import Qgis,QgsProject,NULL,QgsApplication
 
 from collections import Counter
 
 from .assisstant_dfci_dialog import Assisstant_DFCIDialog
 from .modele import *
 from .fonction import  *
-from .mapping_version import *
 from .aproposde import Aproposde
-
+from .window_manager import *
 import xml.etree.ElementTree as ET
 
 class Assisstant_DFCI:
@@ -339,11 +338,11 @@ class Assisstant_DFCI:
 
     def affiche_sens(self):
         try:
-            processing_plugin = plugins[PLUGIN_CHE_SENS_NUM]
+            processing_plugin = plugins[PLUGIN_SENS_NUM]
             processing_plugin.run()
         except KeyError:
             QMessageBox.warning(None, "Attention",
-                                f"Le plugin {PLUGIN_CHE_SENS_NUM} n'est pas installé ou pas activé\n"
+                                f"Le plugin {PLUGIN_SENS_NUM} n'est pas installé ou pas activé\n"
                                 f"- Veuillez l'activer dans le menu \"Installer/Gérer les extensions de QGIS\"")
 
 
@@ -370,10 +369,25 @@ class Assisstant_DFCI:
         self.actualiserSelection()
 
     def initGui(self):
-        pass
+        self.iface.projectRead.connect(self.on_project_opened)
+        # événement fermeture de qgis
+        QgsApplication.instance().aboutToQuit.connect(self.fermeture_qgis)
 
     def unload(self):
         pass
+
+    def on_project_opened(self):
+        settings = QSettings(NativeFormat, UserScope, "IGN", TITRE)
+        visible = settings.value("visible", False, type=bool)
+        if visible:
+            self.run()
+
+    def on_dialog_closed(self):
+        sauve_position_dial(self.dlg)
+        self.dlg = None
+
+    def fermeture_qgis(self):
+        sauve_position_dial(self.dlg)
 
     def run(self):
         if self.dlg is not None:
@@ -383,9 +397,12 @@ class Assisstant_DFCI:
         if not self.islayer_espaceco():
             return
 
-
         self.set_active_layer(LAYER_ESPACE_CO[0])
         self.dlg = Assisstant_DFCIDialog()
+
+        # connection de la fermeture du dialogue
+        self.dlg.finished.connect(self.on_dialog_closed)
+        restore_position_dial(self.dlg)
 
         # ******************************
         champs_manquant, champs_readonly = test_modele(self.layer)
@@ -455,26 +472,26 @@ class Assisstant_DFCI:
         self.dlg.show()
 
         # Run the dialog event loop
-        result = self.dlg.exec()
-        # See if OK was pressed
-        if not result:
-            # on deconnecte le signal en quittant
-            try:
-                self.iface.mapCanvas().selectionChanged.disconnect(self.actualiserSelection)
-            except TypeError:
-                pass  # aucune connexion existante
-
-            # si on quitte, on remet la vue sans le sens de numérisation via le plugin
-            try:
-                processing_plugin = plugins[PLUGIN_CHE_SENS_NUM]
-                processing_plugin.suppr_symb_sens_num(self.layer)
-            except:
-                pass
-
-            self.layer.triggerRepaint()
-            self.dlgAProposDe.close()
-
-
-            # on réinitialise pour gere le rechargement si une seule instance
-            self.dlg = None
+        # result = self.dlg.exec()
+        # # See if OK was pressed
+        # if not result:
+        #     # on deconnecte le signal en quittant
+        #     try:
+        #         self.iface.mapCanvas().selectionChanged.disconnect(self.actualiserSelection)
+        #     except TypeError:
+        #         pass  # aucune connexion existante
+        #
+        #     # si on quitte, on remet la vue sans le sens de numérisation via le plugin
+        #     try:
+        #         processing_plugin = plugins[PLUGIN_SENS_NUM]
+        #         processing_plugin.suppr_symb_sens_num(self.layer)
+        #     except:
+        #         pass
+        #
+        #     self.layer.triggerRepaint()
+        #     self.dlgAProposDe.close()
+        #
+        #
+        #     # on réinitialise pour gere le rechargement si une seule instance
+        #     self.dlg = None
 
