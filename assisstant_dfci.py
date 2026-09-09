@@ -33,7 +33,7 @@ from .modele import *
 from .fonction import  *
 from .aproposde import Aproposde
 from .window_manager import *
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ET # nosec B405
 
 class Assisstant_DFCI:
     """
@@ -85,7 +85,7 @@ class Assisstant_DFCI:
         # initialisation du dictionnaire des champs, attributs associés
         # à partir du xml
         dico_champs_val_xml = {}
-        tree = ET.parse(PATH_REP + "\XML\Attributs.xml")
+        tree = ET.parse(PATH_REP + "\XML\Attributs.xml") # nosec B314
         root = tree.getroot()
         for champs in root.findall("champs"):
             # il faut reinitialiser la liste, pas juste la vider
@@ -260,7 +260,7 @@ class Assisstant_DFCI:
         if len(self.dico_champs_modifie) == 0:
             return
 
-        QGuiApplication.setOverrideCursor(WaitCursor)
+        QGuiApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.layer.startEditing()
         for sel in self.layer.selectedFeatures():
 
@@ -347,7 +347,7 @@ class Assisstant_DFCI:
 
 
     def a_propos(self):
-        self.dlgAProposDe.show()
+        self.dlgAProposDe.exec()
 
     def __init__(self, iface):
         self.dlgAProposDe = None
@@ -377,7 +377,7 @@ class Assisstant_DFCI:
         pass
 
     def on_project_opened(self):
-        settings = QSettings(NativeFormat, UserScope, "IGN", TITRE)
+        settings = QSettings(QSettings.Format.NativeFormat, QSettings.Scope.UserScope, "IGN", TITRE)
         visible = settings.value("visible", False, type=bool)
         if visible:
             self.run()
@@ -409,6 +409,7 @@ class Assisstant_DFCI:
 
         self.set_active_layer(LAYER_ESPACE_CO[0])
         self.dlg = Assisstant_DFCIDialog()
+        self.dlg.setWindowTitle(f"{TITRE}")
 
         # connection de la fermeture du dialogue
         self.dlg.finished.connect(self.on_dialog_closed)
@@ -423,9 +424,6 @@ class Assisstant_DFCI:
         # ******************************
 
 
-        self.dlg.setWindowTitle(f"{TITRE}")
-        self.dlgAProposDe = Aproposde()
-        self.dlgAProposDe.pushButtonDoc.clicked.connect(afficheDoc)
 
         self.dlg.textEdit_info_route.setText("")
         self.dlg.textEdit_info_complexe.setText("")
@@ -436,7 +434,9 @@ class Assisstant_DFCI:
         self.dlg.mColorButton.setColor(self.iface.mapCanvas().selectionColor())
 
         # a propos de
-        self.dlgAProposDe.setWindowFlags(WindowStaysOnTopHint|WindowTitleHint | WindowCloseButtonHint)
+        self.dlgAProposDe = Aproposde()
+        self.dlgAProposDe.pushButtonDoc.clicked.connect(afficheDoc)
+        self.dlgAProposDe.setWindowFlags(Qt.WindowType.Dialog)
         self.dlg.pushButtonAPropos.clicked.connect(self.a_propos)
         self.dlgAProposDe.setWindowTitle(f"{TITRE}")
 
@@ -478,6 +478,6 @@ class Assisstant_DFCI:
 
         # show the dialog
         self.dlg.setParent(self.iface.mainWindow())
-        self.dlg.setWindowFlags(Dialog | WindowTitleHint | WindowCloseButtonHint)
+        self.dlg.setWindowFlags(Qt.WindowType.Dialog | Qt.WindowType.WindowTitleHint | Qt.WindowType.WindowCloseButtonHint)
         self.dlg.show()
 
