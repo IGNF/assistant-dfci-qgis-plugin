@@ -1,9 +1,9 @@
 import os
 
-from qgis.PyQt.QtWidgets import QDialog, QLabel
+from qgis.PyQt.QtWidgets import QDialog, QLabel,QTextEdit
 from qgis.PyQt.uic import loadUi
+from qgis.PyQt.QtCore import Qt
 
-from .mapping_version import *
 
 CHAMPS_USE = ["piste_dfci","categorie_dfci","nature_detaillee_dfci","sens_de_circulation_dfci",
               "vitesse_moyenne_dfci","aire_de_retournement_dfci","gabarit_dfci","impasse_dfci","ouvrage_d_art_limitant_dfci",
@@ -35,7 +35,7 @@ def isreadonly(layer,champ):
 def config_modele(champs_manquant,champs_readonly):
     dlgConfig = QDialog()
     loadUi(os.path.join(os.path.dirname(__file__) ,"modele.ui"), dlgConfig)
-    dlgConfig.setWindowFlags(WindowStaysOnTopHint | WindowCloseButtonHint)
+    dlgConfig.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.WindowCloseButtonHint)
     dlgConfig.setWindowTitle("Compatibilité du modéle")
 
     dlgConfig.tableWidget_etat_champs.setColumnCount(2)
@@ -44,7 +44,7 @@ def config_modele(champs_manquant,champs_readonly):
     dlgConfig.tableWidget_etat_champs.verticalHeader().setDefaultSectionSize(20)
 
     # champs manquants
-    dlgConfig.textEdit_champs_manquants.setLineWrapMode(NoWrap)
+    dlgConfig.textEdit_champs_manquants.setLineWrapMode(QTextEdit.LineWrapMode.NoWrap)
     for champ in champs_manquant:
         dlgConfig.textEdit_champs_manquants.append(f"<span style = 'color: red'><b>{champ}</b></span>")
 
@@ -60,7 +60,7 @@ def config_modele(champs_manquant,champs_readonly):
         dlgConfig.tableWidget_etat_champs.setCellWidget(row, 0, label_champ)
 
         label_readonly = QLabel(readonly_str)
-        label_readonly.setAlignment(AlignCenter)
+        label_readonly.setAlignment(Qt.AlignmentFlag.AlignCenter)
         dlgConfig.tableWidget_etat_champs.setCellWidget(row, 1, label_readonly)
 
     dlgConfig.tableWidget_etat_champs.resizeColumnsToContents()
